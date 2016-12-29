@@ -13,6 +13,10 @@ str1 = """There once was a girl who decided to kill herself. No wait, that's too
 
 
 def getCorpus():
+	"""
+	returns the corpus to use, should return a text file or a 
+	corpus given by nltk
+	"""
 	# train = state_union.raw("2005-GWBush.txt")
 	# sample = state_union.raw("2006-GWBush.txt")
 	#finder = BigramCollocationFinder.from_words(sample.words('english-web.txt'))
@@ -20,19 +24,30 @@ def getCorpus():
 	return sample
 
 def tokenizeWords(aCorpus):
-	tokens = word_tokenize(aCorpus)
+	"""
+	tokenizes words with nltk's word_tokenize() method, 
+	should update so it tokenizes according to twitter posts
+	"""
+	tokens = word_tokenize(aCorpus) #todo: replace with nltk's twitter tokenizer
 	return tokens
 
 def getTotalWords(tokenizedWordsList):
+	"""returns number of words in a corpus"""
 	return len(tokenizedWordsList)
 
 def getBigrams(tokensList):
+	"""
+	given a corpus, returns a list of bigrams as a list of tuples
+	"""
 	genBigrams = bigrams(tokensList)
 	allBigrams = list(genBigrams)
 	#print("***Bigram liset***\n", allBigrams, "\n***Bigram list***")
 	return allBigrams
 
 def createBigramDict(bigramDict, bigramList):
+	"""
+	creates a dictionary with a count of each unique words
+	"""
 	anotherBigramDict = {}
 	for first, second in bigramList:
 		bigramDict[first] +=1
@@ -58,6 +73,7 @@ def untokenize(words):
 
 
 def buildSentence(wordCountDict, bigramDefDict, totalWords):
+	"""To lazy to add documentation"""
 	for i in range(0,5):
 		seedWord = getSeedWord(wordCountDict)
 		firstWord = seedWord # will only be seed word for first iteration
@@ -78,10 +94,10 @@ def main():
 	corpusBigramsList = getBigrams(tokensList)
 	corpusBigramDict = createBigramDict(bigramCounts, corpusBigramsList)
 	sampleSents = buildSentence(bigramCounts, corpusBigramDict, wordCount)
-	print("****Sample Sentence****\n")
+	print("****Sample Sentences****\n")
 	for sent in sampleSents: 
 		print("\t",sent)
-	print("\n****Sample Sentence****")
+	print("\n****Sample Sentences****")
 
 
 if __name__ == '__main__':
