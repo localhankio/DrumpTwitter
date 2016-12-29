@@ -38,7 +38,7 @@ def createBigramDict(bigramDict, bigramList):
 		anotherBigramDict.setdefault(first, []).append(second)
 	return anotherBigramDict
 
-def buildSentence(wordCountDict, bigramDefDict, totalWords):
+def getSeedWord(wordCountDict):
 	seedWord = getSeedWord()
 	tempWord = seedWord
 	sentences = []
@@ -49,11 +49,14 @@ def buildSentence(wordCountDict, bigramDefDict, totalWords):
 		leftover -= value
 		#print("\tleft leftover", leftover)
 		if (leftover <=0):
-			chosenTok = key
+			seedWord = key
 			print(key)
-			break
+			return key
+
+def buildSentence(wordCountDict, bigramDefDict, totalWords):
+	seedWord = getSeedWord(wordCountDict)
 	for i in range(0,5):
-		firstWord = getSeedWord()# will only be seed word for first iteration
+		firstWord = seedWord # will only be seed word for first iteration
 		generatedSentence = firstWord + " "
 		for i in range(0,10):
 			secondWord = choice(bigramDefDict[firstWord])
@@ -62,9 +65,6 @@ def buildSentence(wordCountDict, bigramDefDict, totalWords):
 			firstWord = secondWord
 		sentences.append(generatedSentence)
 	return sentences
-
-def getSeedWord():
-	return "The"
 
 def main():
 	bigramCounts = defaultdict(int)
