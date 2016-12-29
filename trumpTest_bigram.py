@@ -84,13 +84,13 @@ def buildSentence(wordCountDict, bigramDefDict, totalWords):
 	for i in range(0,5):
 		seedWord = getSeedWord(wordCountDict, totalWords)
 		firstWord = seedWord # will only be seed word for first iteration
-		generatedSentence = firstWord + " "
+		generatedSentence = [firstWord]
 		for i in range(0,10):
 			secondWord = choice(bigramDefDict[firstWord])
 			#print("Second word ", secondWord)
-			generatedSentence += secondWord + " "
+			generatedSentence.append(secondWord)
 			firstWord = secondWord
-		sentenceList.append(generatedSentence)
+		sentenceList.append(untokenize(generatedSentence))
 	return sentenceList
 
 def main():
