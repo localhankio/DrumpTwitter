@@ -1,7 +1,7 @@
 from collections import defaultdict
 from random import choice, randint
 import nltk
-from nltk.tokenize import word_tokenize
+from nltk.tokenize import TweetTokenizer
 from nltk import FreqDist, bigrams
 from nltk.collocations import * 
 from nltk.corpus import state_union
@@ -17,9 +17,6 @@ def getCorpus():
 	returns the corpus to use, should return a text file or a 
 	corpus given by nltk
 	"""
-	# train = state_union.raw("2005-GWBush.txt")
-	# sample = state_union.raw("2006-GWBush.txt")
-	#finder = BigramCollocationFinder.from_words(sample.words('english-web.txt'))
 	sample = open("tweets.txt", "r", encoding="utf-8").read()
 	return sample
 
@@ -28,7 +25,8 @@ def tokenizeWords(aCorpus):
 	tokenizes words with nltk's word_tokenize() method, 
 	should update so it tokenizes according to twitter posts
 	"""
-	tokens = word_tokenize(aCorpus) #todo: replace with nltk's twitter tokenizer
+	twitterTknzr = TweetTokenizer()
+	tokens = twitterTknzr.tokenize(aCorpus)
 	return tokens
 
 def getTotalWords(tokenizedWordsList):
@@ -71,20 +69,29 @@ def untokenize(words):
     step6 = step5.replace(" ` ", " '")
     return step6.strip()
 
+def getSeedWord(wordCountDict, totalWords):
+	randFirst = randint(0, totalWords)
+	leftover = totalWords - randFirst
+	print("leftover =", leftover)
+	for key, value in wordCountDict.items():
+		leftover -= value
+		if (leftover <=0):
+			return key
 
 def buildSentence(wordCountDict, bigramDefDict, totalWords):
 	"""To lazy to add documentation"""
+	sentenceList = []
 	for i in range(0,5):
-		seedWord = getSeedWord(wordCountDict)
+		seedWord = getSeedWord(wordCountDict, totalWords)
 		firstWord = seedWord # will only be seed word for first iteration
 		generatedSentence = firstWord + " "
 		for i in range(0,10):
 			secondWord = choice(bigramDefDict[firstWord])
 			#print("Second word ", secondWord)
-			generatedSentence.append(secondWord)
+			generatedSentence += secondWord + " "
 			firstWord = secondWord
-		sentences.append(untokenize(generatedSentence))
-	return sentences
+		sentenceList.append(generatedSentence)
+	return sentenceList
 
 def main():
 	bigramCounts = defaultdict(int)
