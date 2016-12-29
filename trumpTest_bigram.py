@@ -5,6 +5,7 @@ from nltk.tokenize import word_tokenize
 from nltk import FreqDist, bigrams
 from nltk.collocations import * 
 from nltk.corpus import state_union
+import re
 
 str1 = """There once was a girl who decided to kill herself. No wait, that's too dark. Let me start again. There once was a girl 
 		who decided to kill monsters that came into her head after a night of heavy drinking becasue of she was an alcaholic.
@@ -15,7 +16,7 @@ def getCorpus():
 	# train = state_union.raw("2005-GWBush.txt")
 	# sample = state_union.raw("2006-GWBush.txt")
 	#finder = BigramCollocationFinder.from_words(sample.words('english-web.txt'))
-	sample = open("./Manifesto.txt", "r", encoding="utf-8").read()
+	sample = open("tweets.txt", "r", encoding="utf-8").read()
 	return sample
 
 def tokenizeWords(aCorpus):
@@ -38,20 +39,23 @@ def createBigramDict(bigramDict, bigramList):
 		anotherBigramDict.setdefault(first, []).append(second)
 	return anotherBigramDict
 
-def getSeedWord(wordCountDict):
-	seedWord = getSeedWord()
-	tempWord = seedWord
-	sentences = []
-	randFirst = randint(0, totalWords)
-	leftover = totalWords - randFirst
-	print("leftover =", leftover)
-	for key, value in wordCountDict.items():
-		leftover -= value
-		#print("\tleft leftover", leftover)
-		if (leftover <=0):
-			seedWord = key
-			print(key)
-			return key
+def untokenize(words):
+    """
+    Untokenizing a text undoes the tokenizing operation, restoring
+    punctuation and spaces to the places that people expect them to be.
+    Ideally, `untokenize(tokenize(text))` should be identical to `text`,
+    except for line breaks.
+    """
+    text = ' '.join(words)
+    step1 = text.replace("`` ", '"').replace(" ''", '"').replace('. . .',  '...')
+    step2 = step1.replace(" ( ", " (").replace(" ) ", ") ")
+    step3 = re.sub(r' ([.,:;?!%]+)([ \'"`])', r"\1\2", step2)
+    step4 = re.sub(r' ([.,:;?!%]+)$', r"\1", step3)
+    step5 = step4.replace(" '", "'").replace(" n't", "n't").replace(
+         "can not", "cannot")
+    step6 = step5.replace(" ` ", " '")
+    return step6.strip()
+
 
 def buildSentence(wordCountDict, bigramDefDict, totalWords):
 	for i in range(0,5):
@@ -61,9 +65,9 @@ def buildSentence(wordCountDict, bigramDefDict, totalWords):
 		for i in range(0,10):
 			secondWord = choice(bigramDefDict[firstWord])
 			#print("Second word ", secondWord)
-			generatedSentence += secondWord + " "
+			generatedSentence.append(secondWord)
 			firstWord = secondWord
-		sentences.append(generatedSentence)
+		sentences.append(untokenize(generatedSentence))
 	return sentences
 
 def main():
