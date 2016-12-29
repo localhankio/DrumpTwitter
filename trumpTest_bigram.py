@@ -54,8 +54,8 @@ def getSeedWord(wordCountDict):
 			return key
 
 def buildSentence(wordCountDict, bigramDefDict, totalWords):
-	seedWord = getSeedWord(wordCountDict)
 	for i in range(0,5):
+		seedWord = getSeedWord(wordCountDict)
 		firstWord = seedWord # will only be seed word for first iteration
 		generatedSentence = firstWord + " "
 		for i in range(0,10):
