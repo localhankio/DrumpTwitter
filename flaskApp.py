@@ -7,7 +7,7 @@ def hello():
 	print()
 	tweetArr = drump.doEverything()
 
-	return "Hello World!\n Tweet From Trump: " + tweetArr[0]
+	return "<p>Hello World!</p> <br> <p> Tweet From Trump: " + tweetArr[0] + "</p>"
 
 
 if __name__ == "__main__":
