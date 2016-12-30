@@ -17,6 +17,7 @@ def getCorpus():
 	returns the corpus to use, should return a text file or a 
 	corpus given by nltk
 	"""
+	print("in getting corpus")
 	sample = open("tweets.txt", "r", encoding="utf-8").read()
 	return sample
 
@@ -72,13 +73,12 @@ def untokenize(words):
 def getSeedWord(wordCountDict, totalWords):
 	randFirst = randint(0, totalWords)
 	leftover = totalWords - randFirst
-	print("leftover =", leftover)
 	for key, value in wordCountDict.items():
 		leftover -= value
 		if (leftover <=0):
 			return key
 
-def buildSentence(wordCountDict, bigramDefDict, totalWords):
+def buildSentences(wordCountDict, bigramDefDict, totalWords, numSents=5, sentLen = 5):
 	"""To lazy to add documentation"""
 	sentenceList = []
 	for i in range(0,5):
@@ -92,6 +92,24 @@ def buildSentence(wordCountDict, bigramDefDict, totalWords):
 			firstWord = secondWord
 		sentenceList.append(untokenize(generatedSentence))
 	return sentenceList
+	
+def tryme():
+	return "from trumpTest!"
+	pass
+
+def doEverything():
+	bigramCounts = defaultdict(int)
+	baseCorpus = getCorpus()
+	tokensList = tokenizeWords(baseCorpus)
+	wordCount = getTotalWords(tokensList)
+	corpusBigramsList = getBigrams(tokensList)
+	corpusBigramDict = createBigramDict(bigramCounts, corpusBigramsList)
+	sents = buildSentences(bigramCounts, corpusBigramDict, wordCount, 5, 10)
+	return sents 
+	# print("****Sample Sentences****\n")
+	# for sent in sampleSents: 
+	# 	print("\t",sent)
+	# print("\n****Sample Sentences****")
 
 def main():
 	bigramCounts = defaultdict(int)
@@ -100,7 +118,7 @@ def main():
 	wordCount = getTotalWords(tokensList)
 	corpusBigramsList = getBigrams(tokensList)
 	corpusBigramDict = createBigramDict(bigramCounts, corpusBigramsList)
-	sampleSents = buildSentence(bigramCounts, corpusBigramDict, wordCount)
+	sampleSents = buildSentences(bigramCounts, corpusBigramDict, wordCount, 5, 8)
 	print("****Sample Sentences****\n")
 	for sent in sampleSents: 
 		print("\t",sent)
