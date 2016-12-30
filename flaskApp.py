@@ -1,12 +1,13 @@
 from flask import Flask
-import trumpTest_bigram
+import drump_bg as drump
 app = Flask(__name__)
 
 @app.route("/")
 def hello():
 	print()
-	#print(trump).
-	return "Hello World!" + trumpTest_bigram.tryme()
+	tweetArr = drump.doEverything()
+
+	return "Hello World!\n Tweet From Trump: " + tweetArr[0]
 
 
 if __name__ == "__main__":
