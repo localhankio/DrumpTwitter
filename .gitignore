@@ -1,2 +1,7 @@
 keys.py
+sample.py
+tweetDownloader.py
+sshConnect.txt
+notSecrets.txt
+out.txt
 __pycache__
