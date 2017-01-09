@@ -1,0 +1,21 @@
+<!doctype html>
+<title>Hello from Flask</title>
+{% if speeches %}
+  <h1>Could you imagine Trump saying this!</h1>
+  {% for sp in speeches %}
+  <ul>
+  	<li>{{sp}}</li>
+  </ul>
+  {% endfor %}
+{% elif tweets %}
+  <h1>Could you imagine Trump tweeting this!</h1>
+  {% for tw in tweets %}
+  <ul>
+  	<li>{{tw}}</li>
+  </ul>
+  {% endfor %}
+{% endif %}
+<footer>
+Brought to you by Henry Shen and Garrett Beatty
+<a href="https://github.com/shenryHen/DrumpTwitter"><br>Visit our GitHub page</a>
+</footer>
