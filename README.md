@@ -1,4 +1,4 @@
- # DrumpTwitter
+#DrumpTwitter
 Generates Hypothetical tweets that Donald Trump would post.
 This application references his previous tweets to create hypothetical tweets. 
 Since it only uses bigrams to generate sentneces, some the tweets generated may not make sense. Grammmar structure is not taken into account. It may be added in a later release.
