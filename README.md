@@ -4,7 +4,7 @@ This application references his previous tweets to create hypothetical tweets.
 Since it only uses bigrams to generate sentneces, some the tweets generated may not make sense. Grammmar structure is not taken into account. It may be added in a later release.
 
 You can check out what crazy tweets DrumpTwitter created by this link: 
-http://drump-v3.us-east-1.elasticbeanstalk.com/ 
+http://drump-env1.q2c3h5d8m8.us-east-1.elasticbeanstalk.com/
 
 ##Command line tools
 There is also a command-line utility to interface with the program. Please note that you ned to have NLTK installed beforehand.
