@@ -7,7 +7,7 @@ You can check out what crazy tweets DrumpTwitter created by this link:
 http://drump-env1.q2c3h5d8m8.us-east-1.elasticbeanstalk.com/
 
 ##Command line tools
-There is also a command-line utility to interface with the program. Please note that you ned to have NLTK installed beforehand.
+There is also a command-line utility to interface with the program. Please note that you need to have NLTK installed beforehand.
 ### Sample 
 ```
 $ python drump_bg.py
