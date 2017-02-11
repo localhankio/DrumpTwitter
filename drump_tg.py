@@ -1,5 +1,6 @@
 from collections import defaultdict
 from random import choice, randint
+import pickle 
 import nltk
 from nltk.tokenize import TweetTokenizer
 from nltk import trigrams 
@@ -112,6 +113,9 @@ def buildTweet(wordCountDict, trigramDefDict, totalWords, tweetLength):
 		firstBigram = (firstGivenToken, secondGivenToken)
 	return generatedTweet
 	
+def readTrigrams(pickleLoc= "./trigrams.pickle"):
+	trigrams = pickle.load(open(pickleLoc, "rb"))
+	return trigrams
 
 def generateTweets(wordCountDict, trigramDefDict, totalWords, numTweets=6):
 	tweetLengths = [16, 17, 18, 18, 19, 20] #hard coded number of tokens in tweets, Trump averages 18.77 tokens tweets. picked a skewed distribution for token length 
@@ -122,16 +126,14 @@ def generateTweets(wordCountDict, trigramDefDict, totalWords, numTweets=6):
 	return tweetList
 
 
-def doEverything(corpusLoc="./corpora/tweets.txt"):
+def doEverything(corpusLoc="./corpora/tweets.txt", trigramPickleLoc="./corpora/trigrams.pickle"):
 	'''
 	Literally do all the things. Easy function to generate tweets
 	@param corpus, the text file to base potential tweets 
 	'''
 	trigramCounts = defaultdict(int)
-	baseCorpus = getCorpus(corpusLoc)
-	tokensList = tokenizeWords(baseCorpus)
-	wordCount = getTotalWords(tokensList)
-	corpusTrigramList = getTrigrams(tokensList)
+	corpusTrigramList = readTrigrams(trigramPickleLoc)
+	wordCount = len(corpusTrigramList)
 	corpusTrigramDict = createTrigramDict(trigramCounts, corpusTrigramList)
 	sents = generateTweets(trigramCounts, corpusTrigramDict, wordCount, 5)
 	return sents 
@@ -141,8 +143,8 @@ def doEverything(corpusLoc="./corpora/tweets.txt"):
 	# print("\n****Sample Sentences****")
 
 def main():
-	sampleSents = doEverything()
-	print(sampleSents)
+	tweets = doEverything()
+	print(tweets)
 	# print("****Sample Sentences****\n")
 	# for sent in sampleSents: 
 	# 	print("\t",sent)

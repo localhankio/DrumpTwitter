@@ -1,7 +1,11 @@
+drump_bg.py
 keys.py
 sample.py
 tweetDownloader.py
+playground.py
 sshConnect.txt
 notSecrets.txt
 out.txt
-__pycache__
+createZip.cmd
+makeNgramPickle.py
+.\nltk
