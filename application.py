@@ -5,6 +5,7 @@ application = Flask(__name__)
 # print a nice greeting.
 # def say_hello(username = "World"):
 #     return '<h1>Hello There! Welcome to Drump Twitter</h1>\n'
+
 @application.route("/")
 def showTweet():
     twArr = drump.doEverything()

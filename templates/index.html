@@ -1,5 +1,7 @@
-<!doctype html>
-<title>Hello from Flask</title>
+<!DOCTYPE html>
+<html>
+<head> <title>Drump Twitter</title> </head>
+<body>
 {% if speeches %}
   <h1>Could you imagine Trump saying this!</h1>
   {% for sp in speeches %}
@@ -15,7 +17,14 @@
   </ul>
   {% endfor %}
 {% endif %}
+</body>
 <footer>
 Brought to you by Henry Shen and Garrett Beatty
 <a href="https://github.com/shenryHen/DrumpTwitter"><br>Visit our GitHub page</a>
 </footer>
+<script src="{{url_for('static', filename='jquery-3.1.1.slim.min.js')}}"></script>
+<script src="{{url_for('static', filename='linkify.min.js')}}"></script>
+<script src="{{url_for('static', filename='linkify-jquery.min.js')}}"></script>
+<!-- <script src="{{url_for('static', filename='linkify-element.js')}}"></script> -->
+<script src="{{url_for('static', filename='script.js')}}"></script>
+</html>
