@@ -2,9 +2,7 @@ from collections import defaultdict
 from random import choice, randint
 import nltk
 from nltk.tokenize import TweetTokenizer
-from nltk import bigrams, trigrams
-from nltk.collocations import * 
-from nltk.corpus import state_union
+from nltk import trigrams 
 import re
 
 
@@ -41,7 +39,7 @@ def createTrigramDict(trigramDict, trigramList):
 	keyStr = ""
 
 	for first, second, third in trigramList: 	
-		keyStr = first + " " + second
+		keyStr = (first, second)
 		#print(keyStr).encode('utf-8')
 		trigramDict[keyStr] +=1
 		anotherTrigramDict.setdefault(keyStr, []).append(third)
@@ -56,11 +54,12 @@ def isTokenPunctionation(token):
 	elif (len(token) == 1 ):
 		unicodeVal = ord(token)
 		if (unicodeVal <= 47 or (unicodeVal >= 58 and unicodeVal <= 63)): #hardcoded numbers are unicode digits for punctionation, ignores "@" symbole bc valid on twitter
-			# print("\tfound a punctionation")
+			# print("\tfound a punctionation", token)
 			return True 
 		else: 
 			# print("\tNot punct for character ")
-			return False 
+			return False  
+
 def untokenize(words):
     """
     Untokenizing a text undoes the tokenizing operation, restoring
@@ -80,64 +79,74 @@ def untokenize(words):
 
 def getSeedWord(wordCountDict, totalWords):
 	'''returns a "seedword," or the first workd the tweet should start with'''
-	seed = "!"
+	seed = ":"
+	firstToken = ""
+	secondToken = ""
 	while(isTokenPunctionation(seed)):  # while the seed word is NOT punctionation 
 		randFirst = randint(0, totalWords)
 		leftover = totalWords - randFirst
 		for key, value in wordCountDict.items():
+			firstToken = key[0]
+			secondToken = key[1]
 			leftover -= value
 			if (leftover <=0):
-				if (len(key) == 1): #todo: check if one of tokens in key contains punctuation 
-					seed = key
-					break 
-				else:
-					return key 
-	return seed
-def buildSentences(wordCountDict, trigramDefDict, totalWords, numTweets=6):
-	"""To lazy to add documentation"""
-	tweetLengths = [16, 17, 18, 18, 19, 20] #hard coded number of tokens in tweets, Trump averages 18.77 tokensa tweets
-	sentenceList = []
-	for i in range(0, numTweets):
-		firstBigram = getSeedWord(wordCountDict, totalWords)  # will only be seed word for first iteration
-		generatedSentence = firstBigram + " "
-		firstGivenToken = firstBigram.split()[0]
-		secondGivenToken = firstBigram.split()[1]
-		for j in range(0, tweetLengths[i]):
-			thirdToken = choice(trigramDefDict[firstBigram])
-			firstGivenToken = secondGivenToken
-			secondGivenToken = thirdToken
-			generatedSentence += thirdToken + " "
-			firstBigram = firstGivenToken + " " + secondGivenToken
-		sentenceList.append(untokenize(generatedSentence))
-	return sentenceList
-	
-def tryme():
-	return "from Drump_Bigrams"
+				if(isTokenPunctionation(firstToken) ^ isTokenPunctionation(secondToken)):
+					return ("MAKE", "AMERICA")
+				elif (isTokenPunctionation(firstToken) and isTokenPunctionation(secondToken)): 
+					return ("ObamaCare", "was")
+				else: 
+					return key
 
-def doEverything(corpus="./corpora/tweets.txt"):
+def buildTweet(wordCountDict, trigramDefDict, totalWords, tweetLength):
+	"""To lazy to add documentation"""
+
+	firstBigram = getSeedWord(wordCountDict, totalWords)  # will only be seed word for first iteration
+	firstGivenToken = firstBigram[0]
+	secondGivenToken = firstBigram[1]
+	generatedTweet = firstGivenToken + " " + secondGivenToken + " "
+	for j in range(0, tweetLength):
+		thirdToken = choice(trigramDefDict[firstBigram])
+		firstGivenToken = secondGivenToken
+		secondGivenToken = thirdToken
+		generatedTweet += thirdToken + " "
+		firstBigram = (firstGivenToken, secondGivenToken)
+	return generatedTweet
+	
+
+def generateTweets(wordCountDict, trigramDefDict, totalWords, numTweets=6):
+	tweetLengths = [16, 17, 18, 18, 19, 20] #hard coded number of tokens in tweets, Trump averages 18.77 tokens tweets. picked a skewed distribution for token length 
+	tweetList = []
+	for i in range(0, numTweets):
+		aFakeTweet = buildTweet(wordCountDict, trigramDefDict, totalWords, tweetLengths[i])
+		tweetList.append(untokenize(aFakeTweet))
+	return tweetList
+
+
+def doEverything(corpusLoc="./corpora/tweets.txt"):
 	'''
 	Literally do all the things. Easy function to generate tweets
 	@param corpus, the text file to base potential tweets 
 	'''
 	trigramCounts = defaultdict(int)
-	baseCorpus = getCorpus(corpus)
+	baseCorpus = getCorpus(corpusLoc)
 	tokensList = tokenizeWords(baseCorpus)
 	wordCount = getTotalWords(tokensList)
 	corpusTrigramList = getTrigrams(tokensList)
 	corpusTrigramDict = createTrigramDict(trigramCounts, corpusTrigramList)
-	sents = buildSentences(trigramCounts, corpusTrigramDict, wordCount, 5)
+	sents = generateTweets(trigramCounts, corpusTrigramDict, wordCount, 5)
 	return sents 
-	# print("****Sample Sentences****\n")
+	# print("****Sample Sentences****\n")	
 	# for sent in sampleSents: 
 	# 	print("\t",sent)
 	# print("\n****Sample Sentences****")
 
 def main():
 	sampleSents = doEverything()
-	print("****Sample Sentences****\n")
-	for sent in sampleSents: 
-		print("\t",sent)
-	print("\n****Sample Sentences****\n") 
-	# print(corpusTrigramDict["("])
+	print(sampleSents)
+	# print("****Sample Sentences****\n")
+	# for sent in sampleSents: 
+	# 	print("\t",sent)
+	# print("\n****Sample Sentences****\n") 
+	
 if __name__ == '__main__':
 	main()
