@@ -3,14 +3,11 @@ Generates Hypothetical tweets that Donald Trump would post.
 This application references his previous tweets to create hypothetical tweets. 
 Since it only uses bigrams to generate sentneces, some the tweets generated may not make sense. Grammmar structure is not taken into account. It may be added in a later release.
 
-You can check out what crazy tweets DrumpTwitter created by this link: 
-http://drump-env1.q2c3h5d8m8.us-east-1.elasticbeanstalk.com/
-
 ##Command line tools
 There is also a command-line utility to interface with the program. Please note that you need to have NLTK installed beforehand.
 ### Sample 
 ```
-$ python drump_bg.py
+$ python drump_tg.py
 ****Sample Tweets****
 
          to bring back onto the boys. sells Taiwan billions of
